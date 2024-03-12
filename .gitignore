@@ -4,9 +4,9 @@
 
 
 .env
-
-mongo/
-postgres/
+# poner el slash antes del nombre del archivo o carpeta significa que solo afectara a la carpeta o archivo que esta en la raiz de nuestro proyecto: en este caso /mongo
+/mongo
+/postgres
 node_modules/
 dist/
 build/
