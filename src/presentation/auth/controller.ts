@@ -1,7 +1,7 @@
 // Express
 import { Request, Response } from "express";
 // RegisterUserDto
-import { CustomError, RegisterUserDto } from "../../domain";
+import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 // AuthService
 import { AuthService } from "../services/auth.service";
 
@@ -42,8 +42,16 @@ export class AuthController {
     }
     // Login de usuario
     loginUser = (req: Request, res: Response) => {
-    
-        res.json('loginuser');
+        // 
+        const [error, loginUserDto] = LoginUserDto.create(req.body);
+        // validar si hay algun error
+        if( error ) return res.status( 400 ).json({error});
+        
+        // 
+        this.authService.loginUser(loginUserDto!)
+            .then( (user) => res.json(user) )
+            // manejo de errores
+            .catch( error => this.handleError(error, res ) );
           
       }
     

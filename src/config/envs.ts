@@ -9,7 +9,8 @@ export const envs = {
   MONGO_URL: get('MONGO_URL').required().asString(),
   // Nombre de la BD de MONGODB
   MONGO_DB_NAME: get('MONGO_DB_NAME').required().asString(),
-
+  // JWT_SEED
+  JWT_SEED: get('JWT_SEED').required().asString(),
 }
 
 

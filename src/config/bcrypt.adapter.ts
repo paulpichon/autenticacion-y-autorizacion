@@ -12,6 +12,7 @@ export const bcryptAdapter = {
         return hashSync(password, salt);
     },
     // metodo para comparar las contraseñas
+    // compare(contraseña mandada, contraseña en la BD)
     compare: (password: string, hashed: string) => {
         return compareSync(password, hashed);
         // retorna true o false
