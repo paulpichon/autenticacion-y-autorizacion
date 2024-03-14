@@ -2,6 +2,7 @@
 // Aqui es donde se guardara en la BD
 
 // Modelo de MongoDB
+import { bcryptAdapter } from "../../config";
 import { UserModel } from "../../data";
 // RegisterUserDto
 // CustomError
@@ -23,10 +24,12 @@ export class AuthService {
             // creacion del usuario
             // mandamos el registerDto que tiene la informacion del nuevo usuario
             const user = new UserModel(registerUserDto)
-            // guardar en la BD
-            await user.save();
+            
 
             // encriptar la contraseña
+            user.password = bcryptAdapter.hash( registerUserDto.password );
+            // guardar en la BD
+            await user.save();
 
             // JWT ----> Para mantener la autenticacion del usuario
 
