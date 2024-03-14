@@ -3,6 +3,8 @@
 import { Router } from 'express';
 // Importamos clase de AuthController
 import { AuthController } from './controller';
+// Importamos la clase de AuthService
+import { AuthService } from '../services/auth.service';
 
 // Clase Authroutes: clase para nuestras rutas de autenticacion
 export class Authroutes {
@@ -10,8 +12,10 @@ export class Authroutes {
     static get routes(): Router {
         // Funcion Router de express
         const router = Router();
+        // Creamos la instancia de AuthService
+        const authService = new AuthService();
         // Creamos una instancia de AuthController
-        const controller = new AuthController();
+        const controller = new AuthController(authService);
 
         // Definir las rutas
         // Login de usuarios
