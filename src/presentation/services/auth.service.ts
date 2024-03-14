@@ -41,10 +41,15 @@ export class AuthService {
             // y aqui tambien quitamos __v, mediante nuestro UserEntity.fromObject()
             const { password, ...userEntity } = UserEntity.fromObject( user );
 
+            // creacion del JWT
+            const token = await JwtAdapter.generateToken({ id: user.id });
+            // si no se genera el token
+            if (!token ) throw CustomError.internalServer('Error while creating JWT');
+
             // regresamos el usuario
             return { 
                 user: userEntity,
-                token: 'ABC123'
+                token: token
             };
 
         } catch (error) {
@@ -69,7 +74,7 @@ export class AuthService {
         const { password, ...userEntity } = UserEntity.fromObject( user );
 
         // creacion del JWT
-        const token = await JwtAdapter.generateToken({ id: user.id, email: user.email });
+        const token = await JwtAdapter.generateToken({ id: user.id });
         // si no se genera el token
         if (!token ) throw CustomError.internalServer('Error while creating JWT');
 
