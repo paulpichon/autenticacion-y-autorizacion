@@ -12,7 +12,10 @@ import { JwtAdapter, bcryptAdapter } from "../../config";
 
 export class AuthService {
     // DI
-    constructor(){}
+    constructor(
+        // Inyeccion de dependencias: Email Service
+        
+    ){}
 
     // metodos 
     // Metodo para registrar usuarios
@@ -32,15 +35,11 @@ export class AuthService {
             user.password = bcryptAdapter.hash( registerUserDto.password );
             // guardar en la BD
             await user.save();
-
-            // JWT ----> Para mantener la autenticacion del usuario
-
-            // Email de confirmacion
-
             // desestruturamos password para que no nos aparezca en la respuesta
             // y aqui tambien quitamos __v, mediante nuestro UserEntity.fromObject()
             const { password, ...userEntity } = UserEntity.fromObject( user );
 
+            // JWT ----> Para mantener la autenticacion del usuario
             // creacion del JWT
             const token = await JwtAdapter.generateToken({ id: user.id });
             // si no se genera el token
