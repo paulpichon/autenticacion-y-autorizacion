@@ -17,6 +17,8 @@ export const envs = {
   MAILER_SECURE: get('MAILER_SECURE').required().asBool(),
   MAILER_AUTH_USER: get('MAILER_AUTH_USER').required().asString(),
   MAILER_AUTH_PASSWORD: get('MAILER_AUTH_PASSWORD').required().asString(),
+  // URL para link de confirmacion de correo
+  WEBSERVICE_URL: get('WEBSERVICE_URL').required().asString(),
 }
 
 

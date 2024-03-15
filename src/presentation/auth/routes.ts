@@ -4,7 +4,10 @@ import { Router } from 'express';
 // Importamos clase de AuthController
 import { AuthController } from './controller';
 // Importamos la clase de AuthService
-import { AuthService } from '../services/auth.service';
+// email service: envio de correo
+import { AuthService, EmailService } from '../services';
+import { envs } from '../../config';
+
 
 // Clase Authroutes: clase para nuestras rutas de autenticacion
 export class Authroutes {
@@ -12,8 +15,19 @@ export class Authroutes {
     static get routes(): Router {
         // Funcion Router de express
         const router = Router();
+
+        // creamos una instancia de email service
+        // e inyectamos las variables de entorno que nos solicita
+        const emailService = new EmailService(
+            envs.MAILER_HOST,
+            envs.MAILER_PORT,
+            envs.MAILER_SECURE,
+            envs.MAILER_AUTH_USER,
+            envs.MAILER_AUTH_PASSWORD,
+        );
         // Creamos la instancia de AuthService
-        const authService = new AuthService();
+        // Insetamos emailService a AuthService
+        const authService = new AuthService(emailService);
         // Creamos una instancia de AuthController
         const controller = new AuthController(authService);
 
