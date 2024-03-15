@@ -117,4 +117,32 @@ export class AuthService {
         // si todo salio bien retornamos un true
         return true;
     }
+
+    // validar email
+    public validateEmail = async( token: string ) => {
+        // payload
+        const payload = await JwtAdapter.validateToken( token );
+        // si no hay payload, mostramos un mensaje de error
+        if (!payload) throw CustomError.unauthorized('Invalid token');
+
+        // email: podemos decirle que tome el email como un objeto de tipo string
+        const { email } = payload as { email: string };
+        // si no existe, es porque ocurrio un error de nuestra parte
+        if (!email) throw CustomError.internalServer('Email not in token');
+
+        // usuario de la BD
+        const user = await UserModel.findOne({ email });
+        // si no existe el user
+        if (!user) throw CustomError.internalServer('Email not exists');
+
+        // actualizamos la BD
+        // en este caso actualizamos emailValidated de la BD de false a true
+        user.emailValidated = true;
+        // y guardamos en la BD
+        await user.save();
+
+        return true;
+
+
+    } 
 }

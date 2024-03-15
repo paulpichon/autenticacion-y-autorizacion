@@ -36,8 +36,18 @@ export class JwtAdapter {
 
     // metodo para validar el JWT
     static validateToken(token: string) {
-        // TODO
-        throw new Error('NOT IMPLEMENTED');
+        
+        return new Promise( (resolve) => {
+
+            jwt.verify( token, JWT_SEED, (err, decoded ) => {
+                // si hay un error devolvemos el resolve con un null
+                if ( err ) return resolve( null );
+                // si no hay errores devolvemo el decoded
+                resolve( decoded );
+            });
+
+        });
+
     }
 
 
