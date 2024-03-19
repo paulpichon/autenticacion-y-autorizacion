@@ -106,6 +106,7 @@ export class AuthService {
 
         // crear options del correo
         const options = {
+            from: '¡AquíEstoy! <info@aquiestoy.mx>', //AGREGADO 
             to:email,
             subject: 'Validate your email',
             htmlBody: html

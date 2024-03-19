@@ -1,15 +1,16 @@
 import nodemailer, { Transporter } from 'nodemailer';
 
 export interface SendMailOptions {
-  to: string | string[];
-  subject: string;
-  htmlBody: string;
-  attachements?: Attachement[];
+    from: string;
+    to: string | string[];
+    subject: string;
+    htmlBody: string;
+    attachements?: Attachement[];
 }
 
 export interface Attachement {
-  filename: string;
-  path: string;
+    filename: string;
+    path: string;
 }
 
 
@@ -54,11 +55,12 @@ export class EmailService {
 
     async sendEmail( options: SendMailOptions ): Promise<boolean> {
 
-        const { to, subject, htmlBody, attachements = [] } = options;
+        const { from, to, subject, htmlBody, attachements = [] } = options;
 
 
         try {
             const sentInformation = await this.transporter.sendMail( {
+                from: from,
                 to: to,
                 subject: subject,
                 html: htmlBody,
