@@ -16,7 +16,7 @@ const categorySchema = new mongoose.Schema({
     // crear una relacion con un usuario
     user: {
         // Schema.Types.ObjectId --> esto significa que debe ser un valor de este tipo
-        tpye: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         // ponemos la referencia a la coleccion en este caso es User del modelo/archivo User.model.ts
         ref: 'User',
         required: true,
