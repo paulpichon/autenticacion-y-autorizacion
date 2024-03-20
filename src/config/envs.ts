@@ -11,6 +11,8 @@ export const envs = {
   MONGO_DB_NAME: get('MONGO_DB_NAME').required().asString(),
   // JWT_SEED
   JWT_SEED: get('JWT_SEED').required().asString(),
+  // Variable para evitar el envio de correos: ya esta probado esa funcion
+  SEND_EMAIL: get('SEND_EMAIL').default('false').asBool(),
   // titan mailer configuration
   MAILER_HOST: get('MAILER_HOST').required().asString(),
   MAILER_PORT: get('MAILER_PORT').required().asPortNumber(),

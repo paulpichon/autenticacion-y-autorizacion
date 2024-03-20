@@ -24,6 +24,9 @@ export class Authroutes {
             envs.MAILER_SECURE,
             envs.MAILER_AUTH_USER,
             envs.MAILER_AUTH_PASSWORD,
+            // SOLO PARA ENVIAR EL CORREO DE FORMA FICTICIA
+            // Se puede quitar cuando ya se este en produccion
+            envs.SEND_EMAIL,
         );
         // Creamos la instancia de AuthService
         // Insetamos emailService a AuthService
