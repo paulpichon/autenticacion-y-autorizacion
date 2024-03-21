@@ -35,7 +35,8 @@ export class JwtAdapter {
     }   
 
     // metodo para validar el JWT
-    static validateToken(token: string) {
+    // valor generico <T> ----> puede ser caulquier cosa un BOOLEANO, STRING, OBJETO
+    static validateToken<T>(token: string): Promise< T | null > {
         
         return new Promise( (resolve) => {
 
@@ -43,7 +44,8 @@ export class JwtAdapter {
                 // si hay un error devolvemos el resolve con un null
                 if ( err ) return resolve( null );
                 // si no hay errores devolvemo el decoded
-                resolve( decoded );
+                // le decimos a typescript es que trate decoded como tipo T
+                resolve( decoded as T );
             });
 
         });
