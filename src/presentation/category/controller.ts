@@ -4,11 +4,15 @@
 import { Request, Response } from "express";
 // CreateCategoryDto
 import { CreateCategoryDto, CustomError } from "../../domain";
+// Category service
+import { CategoryService } from "../services/category.service";
 
 
 export class CategoryController {
     // Inyeccion de dependencias
-    constructor(){}
+    constructor(
+        private readonly categoryService: CategoryService
+    ){}
     // manejo de errores
     private handleError = ( error: unknown, res: Response) => {
         // validar si el error es una instancia de nuestro CustomError
@@ -23,13 +27,17 @@ export class CategoryController {
     }
 
     // crear category
-    createCategory = async( req: Request, res: Response) => {
+    createCategory = ( req: Request, res: Response) => {
         // llamamos el metodo de CreateCategoryDto
         const [ error, createCategoryDto ] = CreateCategoryDto.create( req.body )
         // si hay un error lo mostramos
         if ( error ) return res.status( 400 ).json({ error });
-
-        res.json( createCategoryDto );
+        console.log( createCategoryDto );
+        
+        this.categoryService.createCategory( createCategoryDto!, req.body.user )
+        .then( category => res.status(201).json( category ) )
+        // manejo de errores
+        .catch( error => this.handleError( error, res ) );
         
     }
     // crear category
