@@ -3,7 +3,7 @@
 // custom error
 import { Request, Response } from "express";
 // CreateCategoryDto
-import { CreateCategoryDto, CustomError } from "../../domain";
+import { CreateCategoryDto, CustomError, PaginationDto } from "../../domain";
 // Category service
 import { CategoryService } from "../services/category.service";
 
@@ -43,10 +43,19 @@ export class CategoryController {
     // obtener categories
     getCategories = async( req: Request, res: Response) => {
         
-        this.categoryService.getCategories()
-            .then( categories => res.json( categories ))
-            // manejo de errores
-            .catch( error => this.handleError( error, res ) );
+        // obtener parametros de la REQUEST
+        const { page = 1, limit = 10 } = req.query;
+        // +page, +limit ---> de esta forma convertimos los strings de page y de limit en numeros
+        const [ error, paginationDto ] = PaginationDto.create( +page, +limit );
+        // si hay un error mostramos una alerta
+        if ( error ) return res.status(400).json({ error });
+        // si todo sale bien mostramos el paginationDto
+        res.json( paginationDto  );
+
+        // this.categoryService.getCategories()
+        //     .then( categories => res.json( categories ))
+        //     // manejo de errores
+        //     .catch( error => this.handleError( error, res ) );
         
     }
 
