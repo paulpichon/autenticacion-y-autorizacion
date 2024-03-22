@@ -42,5 +42,24 @@ export class CategoryService {
 
     }
 
+    // obtener categorias
+    async getCategories() {
+        // cuando se hace interacciones con la BD por lo general se hace con un trycatch
+        try {
+            // buscar categorias en la BD
+            const categories = await CategoryModel.find();
+            // retornamos las categorias
+            return categories.map( category => ({
+                id: category.id,
+                name: category.name,
+                available: category.available
+            }));
+
+        } catch (error) {
+            throw CustomError.internalServer('Internal Server Error');
+        }
+
+    }
+
 
 }
