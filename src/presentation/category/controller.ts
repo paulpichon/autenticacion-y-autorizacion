@@ -49,13 +49,12 @@ export class CategoryController {
         const [ error, paginationDto ] = PaginationDto.create( +page, +limit );
         // si hay un error mostramos una alerta
         if ( error ) return res.status(400).json({ error });
-        // si todo sale bien mostramos el paginationDto
-        res.json( paginationDto  );
+  
 
-        // this.categoryService.getCategories()
-        //     .then( categories => res.json( categories ))
-        //     // manejo de errores
-        //     .catch( error => this.handleError( error, res ) );
+        this.categoryService.getCategories( paginationDto! )
+            .then( categories => res.json( categories ))
+            // manejo de errores
+            .catch( error => this.handleError( error, res ) );
         
     }
 

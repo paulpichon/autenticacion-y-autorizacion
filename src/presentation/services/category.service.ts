@@ -1,7 +1,12 @@
 // Create category DTO
 // User Entity
 // custom error
-import { CreateCategoryDto, CustomError, UserEntity } from "../../domain";
+// Pagination DTO
+import {    CreateCategoryDto, 
+            CustomError, 
+            PaginationDto, 
+            UserEntity 
+    } from "../../domain";
 // 
 import { CategoryModel } from "../../data";
 
@@ -43,17 +48,48 @@ export class CategoryService {
     }
 
     // obtener categorias
-    async getCategories() {
+    async getCategories( paginationDto: PaginationDto) {
+        // desestructurar de paginationDTO
+        const {page, limit } = paginationDto;
+
         // cuando se hace interacciones con la BD por lo general se hace con un trycatch
         try {
-            // buscar categorias en la BD
-            const categories = await CategoryModel.find();
+            // total de registros
+            // const total = await CategoryModel.countDocuments();
+            // // buscar categorias en la BD
+            // const categories = await CategoryModel.find()
+            //     // skip
+            //     .skip( (page - 1) * limit )
+            //     // cantidad de registros a traer
+            //     .limit( limit )
+
+
+            const [ total, categories ] = await Promise.all([
+                // total de registros
+                CategoryModel.countDocuments(),
+                CategoryModel.find()
+                // skip
+                .skip( (page - 1) * limit )
+                // cantidad de registros a traer
+                .limit( limit )
+            ]);
+
+
             // retornamos las categorias
-            return categories.map( category => ({
-                id: category.id,
-                name: category.name,
-                available: category.available
-            }));
+            return {
+                page: page,
+                limit: limit,
+                total: total, 
+                next: `/api/categories?page=${ page + 1 }&limit=${ limit }`,
+                prev: (page - 1 > 0) ? `/api/categories?page=${ ( page-1 ) }&limit=${ limit }`: null,
+
+                categories: categories.map( category => ({
+                    id: category.id,
+                    name: category.name,
+                    available: category.available
+                }))
+
+            }
 
         } catch (error) {
             throw CustomError.internalServer('Internal Server Error');
