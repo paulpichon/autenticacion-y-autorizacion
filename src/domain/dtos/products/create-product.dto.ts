@@ -1,3 +1,5 @@
+// Validar el MONGO ID
+import { Validators } from "../../../config";
 
 
 export class CreateProductDto {
@@ -29,7 +31,11 @@ export class CreateProductDto {
             // validar si no viene cada una de las propiedades
             if ( !name ) return ['Missing name'];
             if ( !user ) return ['Missing user'];
+            // validar el MONGO ID del usuario
+            if ( !Validators.isMongoID( user ) ) return ['Invalid User ID'];
             if ( !category ) return ['Missing category'];
+            // validar el MONGO ID de la categoria
+            if ( !Validators.isMongoID( category ) ) return ['Invalid category ID'];
 
             // si todo sale bien
             return [

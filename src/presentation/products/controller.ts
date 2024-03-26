@@ -3,15 +3,20 @@
 // custom error
 import { Request, Response } from "express";
 // CreateCategoryDto
-import { CreateCategoryDto, CustomError, PaginationDto } from "../../domain";
-// Category service
-import { CategoryService } from "../services/category.service";
+// Create Products DTO
+import {CreateProductDto, 
+        CustomError, 
+        PaginationDto 
+} from "../../domain";
+// Product service
+import { ProductService } from "../services/product.service";
+
 
 
 export class ProductController {
     // Inyeccion de dependencias
     constructor(
-        //todo private readonly productService: ProductService
+        private readonly productService: ProductService
     ){}
     // manejo de errores
     private handleError = ( error: unknown, res: Response) => {
@@ -28,19 +33,18 @@ export class ProductController {
 
     // crear producto
     createProduct = ( req: Request, res: Response) => {
-        // llamamos el metodo de CreateCategoryDto
-        // const [ error, createCategoryDto ] = CreateCategoryDto.create( req.body )
-        // // si hay un error lo mostramos
-        // if ( error ) return res.status( 400 ).json({ error });
-        // console.log( createCategoryDto );
+        // llamamos el metodo de CreateProductDto
+        const [ error, createProductDto ] = CreateProductDto.create({ 
+            ...req.body,
+            user: req.body.user.id
+        });
+        // si hay un error lo mostramos
+        if ( error ) return res.status( 400 ).json({ error });
         
-        // this.categoryService.createCategory( createCategoryDto!, req.body.user )
-        // .then( category => res.status(201).json( category ) )
-        // // manejo de errores
-        // .catch( error => this.handleError( error, res ) );
-        
-        return res.json('create products');
-
+        this.productService.createProduct( createProductDto! )
+        .then( category => res.status(201).json( category ) )
+        // manejo de errores
+        .catch( error => this.handleError( error, res ) );
     }
     // obtener productos
     getProducts = async( req: Request, res: Response) => {
@@ -54,10 +58,10 @@ export class ProductController {
 
         return res.json('get products');
 
-        // this.categoryService.getCategories( paginationDto! )
-        //     .then( categories => res.json( categories ))
-        //     // manejo de errores
-        //     .catch( error => this.handleError( error, res ) );
+        this.productService.getProducts( paginationDto! )
+            .then( products => res.json( products ))
+            // manejo de errores
+            .catch( error => this.handleError( error, res ) );
         
     }
 

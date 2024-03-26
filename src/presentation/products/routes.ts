@@ -3,6 +3,9 @@
 import { Router } from 'express';
 // AuthMiddleware
 import { AuthMiddleware } from '../middlewares/auth.middleware';
+// Prodcut Service
+import { ProductService } from '../services/product.service';
+// ProductController
 import { ProductController } from './controller';
 
 
@@ -12,8 +15,10 @@ export class ProductRoutes {
 		static get routes(): Router {
 
 			const router = Router();
-            // constroller
-            const controller = new ProductController();
+            // product service
+            const productService = new ProductService();
+            // controller
+            const controller = new ProductController( productService );
           
 
 			// Definir las rutas
