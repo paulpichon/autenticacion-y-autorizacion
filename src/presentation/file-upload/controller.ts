@@ -26,6 +26,10 @@ export class FileUploadController {
 
     // subir archivo
     uploadFile = ( req: Request, res: Response) => {
+
+        console.log({ files: req.files } );
+        
+
         res.json('uploadFile');
     }
     // subir archivos multiples
