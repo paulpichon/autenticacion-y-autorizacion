@@ -31,4 +31,10 @@ export class MongoDatabase {
 
     }
 
+    // metodo para desconectar la BD
+    static async disconnect() {
+        // desconectar de la BD
+        await mongoose.disconnect();
+    }
+
 }
