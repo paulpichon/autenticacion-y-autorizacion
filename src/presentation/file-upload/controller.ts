@@ -4,12 +4,14 @@
 import { Request, Response } from "express";
 // Custom error
 import { CustomError } from "../../domain";
+import { FileUploadService } from "../services/file-upload.service";
+import { UploadedFile } from "express-fileupload";
 
 
 export class FileUploadController {
     // Inyeccion de dependencias
     constructor(
-        // private readonly categoryService: CategoryService
+        private readonly fileUploadService: FileUploadService 
     ){}
     // manejo de errores
     private handleError = ( error: unknown, res: Response) => {
@@ -27,10 +29,19 @@ export class FileUploadController {
     // subir archivo
     uploadFile = ( req: Request, res: Response) => {
 
-        console.log({ files: req.files } );
-        
+        const files = req.files;
+        // validar si hay archivos seleccionados
+        if ( !req.files || Object.keys( req.files ).length === 0  ) {
+            // mostrar un error
+            return res.status( 400 ).json({ error: 'No files were selected'});
+        }
 
-        res.json('uploadFile');
+        // 
+        const file = req.files.file as UploadedFile;
+
+        this.fileUploadService.uploadSingle( file )
+            .then( uploaded => res.json( uploaded ))
+            .catch( error => this.handleError( error, res ))
     }
     // subir archivos multiples
     uploadMultipleFile = ( req: Request, res: Response) => {
