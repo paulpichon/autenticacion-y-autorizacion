@@ -56,8 +56,6 @@ export class ProductController {
         // si hay un error mostramos una alerta
         if ( error ) return res.status(400).json({ error });
 
-        return res.json('get products');
-
         this.productService.getProducts( paginationDto! )
             .then( products => res.json( products ))
             // manejo de errores

@@ -31,5 +31,18 @@ const userSchema = new mongoose.Schema({
         enum: ['ADMIN_ROLE', 'USER_ROLE']
     }
 });
+// serializar la respuesta
+userSchema.set('toJSON',{
+    // pone el ID que creamos
+    virtuals: true,
+    // quita __v
+    versionKey: false,
+    // quitar algunas propiedades que no queremos ver en el JSON
+    transform: function( doc, ret, options ) {
+        delete ret._id;
+        delete ret.password;
+    }   
+});
+
 // exportar el schema
 export const UserModel = mongoose.model('User', userSchema);

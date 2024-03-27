@@ -23,5 +23,16 @@ const categorySchema = new mongoose.Schema({
         required: true,
     }
 });
+// serializar la respuesta
+categorySchema.set('toJSON',{
+    // pone el ID que creamos
+    virtuals: true,
+    // quita __v
+    versionKey: false,
+    // quitar algunas propiedades que no queremos ver en el JSON
+    transform: function( doc, ret, options ) {
+        delete ret._id;
+    }   
+});
 // exportar el schema
 export const CategoryModel = mongoose.model('Category', categorySchema);

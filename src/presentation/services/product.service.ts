@@ -55,7 +55,9 @@ try {
         .skip( (page - 1) * limit )
         // cantidad de registros a traer
         .limit( limit )
-        // TODO populate
+        // populate: llenar una relacion con informacion de ID que alla en un JSON
+        .populate('user')
+        .populate('category')
     ]);
 
 
