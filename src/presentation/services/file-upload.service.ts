@@ -6,14 +6,21 @@ import path from 'path';
 import fs from 'fs';
 // express fileupload
 import { UploadedFile } from "express-fileupload";
+// UUID
+import { Uuid } from '../../config';
+// Custom Error
+import { CustomError } from '../../domain';
 
 export class FileUploadService {
 
-    constructor(){}
+    constructor(
+        // uuid
+        private readonly uuid = Uuid.v4,
+    ){}
 
     // metodos
     // check del folder: verificar si existe el folder
-    private checkFoler( folderPath: string ) {
+    private checkFolder( folderPath: string ) {
         // verificar si existe en folderPath
         if ( !fs.existsSync( folderPath )) {
             // creamos el folder
@@ -35,20 +42,32 @@ export class FileUploadService {
             //extension del archivo .at() ---> posicion de un arreglo/objeto: 0,1,2,3,4,5,6,...
             // 'image/jpeg': image---> seria primer posicion o posicion 0
             // y jpeg seria segunda posicion o posion 1 
-            const fileExtension = file.mimetype.split('/').at(1);
+            // para que no sea undefined ponemos esto ---> ?? ''
+            const fileExtension = file.mimetype.split('/').at(1) ?? '';
+            // validar la extencion del archivo
+            if ( !validExtensions.includes( fileExtension )) {
+                // si no es correcta la extencion mostramos una alerta
+                throw CustomError.badRequest(`Invalid extension: ${ fileExtension }, valid ones ${ validExtensions }`);
+            }
+
+
             // lugar donde lo vamos a colocar, para esto necesitamos importar 'path'
             const destination = path.resolve( __dirname, '../../../', folder );
             // validar si existe el folder
-            this.checkFoler( destination );
+            this.checkFolder( destination );
+
+            const fileName = `${ this.uuid() }.${ fileExtension }`;
 
 
             // mover el archivo
-            file.mv( destination + `/mi-imagen.${ fileExtension }` );
+            file.mv(`${destination}/${ fileName }`);
+
+            return {fileName};
 
 
         } catch (error) {
-            console.log( error );
-            
+            // console.log( error );
+            throw error;
         }
 
 
