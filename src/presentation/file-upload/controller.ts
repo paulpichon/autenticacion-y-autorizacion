@@ -29,6 +29,7 @@ export class FileUploadController {
     // subir archivo
     uploadFile = ( req: Request, res: Response) => {
 
+        // esto tambien se puede poner en un middleware
         // router.post('/single/:type', controller.uploadFile ); --->
         // el type viene de la ruta de arriba /single/type
         const type = req.params.type;
@@ -40,14 +41,8 @@ export class FileUploadController {
             return res.status( 400 ).json({ error: `Invalid type: ${ type }, valid ones ${ validTypes }`})
         }
 
-        // validar si hay archivos seleccionados
-        if ( !req.files || Object.keys( req.files ).length === 0  ) {
-            // mostrar un error
-            return res.status( 400 ).json({ error: 'No files were selected'});
-        }
-
-        // renombramo req.files.files
-        const file = req.files.file as UploadedFile;
+        // renombramos req.body.files
+        const file = req.body.files.at(0) as UploadedFile;        
         // 
         this.fileUploadService.uploadSingle( file, `uploads/${ type }` )
             .then( uploaded => res.json( uploaded ))
