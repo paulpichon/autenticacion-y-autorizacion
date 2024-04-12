@@ -10,6 +10,8 @@ import { CategoryRoutes } from './category/routes';
 import { ProductRoutes } from './products/routes';
 // FileUpload Routes
 import { FileUploadRoutes } from './file-upload/routes';
+// images URL
+import { ImageRoutes } from './images/routes';
 
 //Clase App Routes
 export class AppRoutes {
@@ -27,6 +29,8 @@ export class AppRoutes {
 			router.use('/api/products', ProductRoutes.routes );
 			// Ruta para la subida de archivos
 			router.use('/api/upload', FileUploadRoutes.routes );
+			// Images
+			router.use('/api/images', ImageRoutes.routes );
 
 			return router;
 			
