@@ -48,9 +48,29 @@ export class FileUploadController {
             .then( uploaded => res.json( uploaded ))
             .catch( error => this.handleError( error, res ))
     }
+
     // subir archivos multiples
     uploadMultipleFile = ( req: Request, res: Response) => {
-        res.json('uploadMultipleFile');
+        
+         // esto tambien se puede poner en un middleware
+        // router.post('/single/:type', controller.uploadFile ); --->
+        // el type viene de la ruta de arriba /single/type
+        const type = req.params.type;
+        // tipos validos, esto se puede configurar
+        const validTypes = ['users', 'products', 'categories'];
+        // si no incluye alguno de estos tipos validTypes
+        if( !validTypes.includes( type )) {
+            // mostramos una alerta
+            return res.status( 400 ).json({ error: `Invalid type: ${ type }, valid ones ${ validTypes }`})
+        }
+
+        // renombramos req.body.files
+        const files = req.body.files as UploadedFile[];        
+        // 
+        this.fileUploadService.uploadMultiple( files, `uploads/${ type }` )
+            .then( uploaded => res.json( uploaded ))
+            .catch( error => this.handleError( error, res ))
+
     }
 
 }

@@ -69,19 +69,22 @@ export class FileUploadService {
             // console.log( error );
             throw error;
         }
-
-
-        
-
     }
 
     // carga multiple
-    uploadMultiple(
-        file: any[],
+    async uploadMultiple(
+        files: UploadedFile[],
         folder: string = 'uploads',
         validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif'],
     ) {
+        
+        // llamamos a uploadSingle por cada archivo que se suba
+        const fileNames = await Promise.all(
+            files.map( file => this.uploadSingle( file, folder, validExtensions ))
+        );
 
+        // regresamos el filename
+        return fileNames;
     }
 
 }
