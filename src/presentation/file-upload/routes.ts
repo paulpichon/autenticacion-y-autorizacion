@@ -7,6 +7,8 @@ import { FileUploadController } from './controller';
 import { FileUploadService } from '../services/file-upload.service';
 // Middleware para suibr archivo
 import { FileUploadMiddleware } from '../middlewares/file-upload.middleware';
+// Middleware Types
+import { TypeMiddleware } from '../middlewares/type.middleware';
 
 //Clase para FileUpload Routes
 export class FileUploadRoutes {
@@ -21,13 +23,16 @@ export class FileUploadRoutes {
 
         // llamamos el middleware para verificar si tiene archivos
         router.use( FileUploadMiddleware.containFiles );
+        // middleware para los tipos ['users', 'products', 'categories'] rutas
+        router.use( TypeMiddleware.validTypes(['users', 'products', 'categories']) );
+
         // Definir las rutas
         // rutas para subir archivos
         // api/upload/single/<user|category|product>/
         // api/upload/multiple/<user|category|product>/
         router.post('/single/:type', controller.uploadFile );
         // POST 
-        router.post('/multiple/:type',  controller.uploadMultipleFile );
+        router.post('/multiple/:type', controller.uploadMultipleFile );
 
         return router;			
     }
